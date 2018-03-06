@@ -1,14 +1,30 @@
+# Source plugin for sending heartbeats in colomanager message format for [Fluentd](http://fluentd.org)
 
-# Contributing
+## Requirements
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.microsoft.com.
+| fluent-plugin-record-modifier  | fluentd | ruby |
+|--------------------------------|---------|------|
+| >= 1.0.0 | >= v0.14.0 | >= 2.1 |
+|  < 1.0.0 | >= v0.12.0 | >= 1.9 |
 
-When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+## Configuration
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+    <source>
+        @type heartbeat
+        tag heartbeat
+        interval 10
+        coloId SJC2
+    </source>
+
+Will send colomanager heartbeat message every 10 seconds with the coloId of SJC2
+
+## Message format
+
+    {
+        "timestamp": 1518222029,
+        "event": "heartbeat",
+        "data": {
+            "coloManagerId": "SJC2"
+        }
+    }
+
