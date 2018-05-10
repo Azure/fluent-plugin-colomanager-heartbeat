@@ -1,4 +1,5 @@
 require 'fluent/plugin/input'
+require 'date'
 
 module Fluent::Plugin
   class Heartbeat < Input
@@ -8,6 +9,11 @@ module Fluent::Plugin
     config_param :interval, :integer
     config_param :tag, :string
 
+    config_param :mdsd, :bool, default: false
+
+    config_param :coloRegion, :string, default: ""
+    config_param :serviceBuild, :string, default: ""
+
     helpers :timer
 
     def start
@@ -15,7 +21,19 @@ module Fluent::Plugin
 
       timer_execute(:heartbeat_timer, interval) {
         time = Fluent::Engine.now
-        record = {"message"=>"{\"timestamp\":#{time.to_s}, \"event\":\"heartbeat\", \"data\":{\"coloManagerId\":\"#{coloId}\"}}"}
+
+        if mdsd
+          record = {
+            "message"=>"HEARTBEAT from a #{coloRegion} fluentd at #{Time.at(time)} UTC", 
+            "servicedeploymentinstance" => coloId,
+            "serviceBuild" => serviceBuild,
+            "format" => "json",
+            "level" => "info"
+          }
+        elsif
+          record = {"message"=>"{\"timestamp\":#{time.to_s}, \"event\":\"heartbeat\", \"data\":{\"coloManagerId\":\"#{coloId}\"}}"}
+        end
+        
         router.emit(tag, time, record)
       }
     end
