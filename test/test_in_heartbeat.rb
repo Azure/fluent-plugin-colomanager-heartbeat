@@ -19,7 +19,7 @@ class HeartbeatTest < Test::Unit::TestCase
         coloId 12345678-1234-1234-abcd-abcd-123456789012
         mdsd true
         coloRegion SJC2
-        serviceBuild master_22
+        buildVersion master_22
       ]
 
     def create_driver(conf)
@@ -33,7 +33,7 @@ class HeartbeatTest < Test::Unit::TestCase
         assert_equal '12345678-1234-1234-abcd-abcd-123456789012', d.instance.coloId
         assert_equal false, d.instance.mdsd
         assert_equal '', d.instance.coloRegion
-        assert_equal '', d.instance.serviceBuild
+        assert_equal '', d.instance.buildVersion
     end
 
     def test_mdsd_configure
@@ -43,7 +43,7 @@ class HeartbeatTest < Test::Unit::TestCase
         assert_equal '12345678-1234-1234-abcd-abcd-123456789012', d.instance.coloId
         assert_equal true, d.instance.mdsd
         assert_equal 'SJC2', d.instance.coloRegion
-        assert_equal 'master_22', d.instance.serviceBuild
+        assert_equal 'master_22', d.instance.buildVersion
     end
 
     def test_queue_run
@@ -69,7 +69,7 @@ class HeartbeatTest < Test::Unit::TestCase
         assert_equal '12345678-1234-1234-abcd-abcd-123456789012', events[0][2]['servicedeploymentinstance']
         assert_equal 'json', events[0][2]['format']
         assert_equal 'info', events[0][2]['level']
-        assert_equal 'master_22', events[0][2]['serviceBuild']
+        assert_equal 'master_22', events[0][2]['buildVersion']
         assert_equal 2, events.length
     end
 end

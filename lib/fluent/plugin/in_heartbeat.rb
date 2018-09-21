@@ -12,7 +12,7 @@ module Fluent::Plugin
     config_param :mdsd, :bool, default: false
 
     config_param :coloRegion, :string, default: ""
-    config_param :serviceBuild, :string, default: ""
+    config_param :buildVersion, :string, default: ""
 
     helpers :timer
 
@@ -26,7 +26,7 @@ module Fluent::Plugin
           record = {
             "message"=>"HEARTBEAT from a #{coloRegion} fluentd at #{Time.at(time)} UTC", 
             "servicedeploymentinstance" => coloId,
-            "serviceBuild" => serviceBuild,
+            "buildVersion" => buildVersion,
             "format" => "json",
             "level" => "info"
           }
