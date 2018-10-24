@@ -10,9 +10,13 @@ module Fluent::Plugin
     config_param :tag, :string
 
     config_param :mdsd, :bool, default: false
+    config_param :mdm, :bool, default: false
 
     config_param :coloRegion, :string, default: ""
     config_param :buildVersion, :string, default: ""
+
+    config_param :namespace, :string, default: ""
+    config_param :metric, :string, default: ""
 
     helpers :timer
 
@@ -30,7 +34,18 @@ module Fluent::Plugin
             "format" => "json",
             "level" => "info"
           }
-        elsif
+        elsif mdm
+          record = {
+            "Namespace"=>@namespace,
+            "Metric"=>@metric,
+            "Dimensions"=> {
+              "ColoRegion" => coloRegion,
+              "DeploymentInstance" => coloId,
+              "BuildVersion" => buildVersion
+            },
+            "Value"=>1
+          }
+        else
           record = {"message"=>"{\"timestamp\":#{time.to_s}, \"event\":\"heartbeat\", \"data\":{\"coloManagerId\":\"#{coloId}\"}}"}
         end
         
